@@ -109,7 +109,35 @@ plt.show()
 
 
 
+# q3b ------------------------------------------------
 
+# true function on the hires grid
+y3_true = f(x3_hires)
+
+# relative error arrays
+rel_err_lin = np.zeros_like(y3_true)
+rel_err_spline = np.zeros_like(y3_true)
+
+# cant divide by zero at x = 0
+mask = y3_true != 0
+
+rel_err_lin[mask] = (y3_lin[mask] - y3_true[mask]) / y3_true[mask]
+rel_err_spline[mask] = (y3_spline[mask] - y3_true[mask]) / y3_true[mask]
+
+# in the case of undefined points, I use NaN so plotting is clean
+rel_err_lin[~mask] = np.nan
+rel_err_spline[~mask] = np.nan
+
+# the relative error plot
+plt.figure()
+plt.plot(x3_hires, rel_err_lin, label="linear rel error")
+plt.plot(x3_hires, rel_err_spline, label="cubic spline rel error")
+plt.axhline(0)
+plt.xlabel("x")
+plt.ylabel("relative error")
+plt.legend()
+plt.title("Q3b - Relative Error")
+plt.show()
 
 
 
