@@ -49,7 +49,7 @@ y_spline = cs(x_hires)
 
 
 
-# ooriginal + interpolated + cubic spline
+# original + interpolated + cubic spline
 plt.figure()
 plt.scatter(x, y, label="original")
 plt.scatter(x_hires, y_hires, s=10, label="linear interp points")   # 
@@ -62,6 +62,50 @@ plt.show()
 
 
 
+
+
+
+#q3a ------------------------------------------------
+
+def f(x):
+    return np.sin((np.pi/2) * x) + x/2
+
+# data from 0 to 10
+x3 = np.arange(0, 11, 1, dtype=float)
+y3 = f(x3)
+
+# hires data
+x3_hires = np.linspace(0, 10, 10 * len(x3))   # 110 points
+
+#  linear interpolation --
+y3_lin = np.zeros_like(x3_hires)
+
+for j, xq in enumerate(x3_hires):
+    i = np.searchsorted(x3, xq) - 1
+
+    if i < 0:
+        i = 0
+    if i > len(x3) - 2:
+        i = len(x3) - 2
+
+    x0, x1 = x3[i], x3[i+1]
+    y0, y1 = y3[i], y3[i+1]
+
+    y3_lin[j] = y0 + (y1 - y0) * (xq - x0) / (x1 - x0)
+
+#  cubic spline 
+cs3 = CubicSpline(x3, y3, bc_type="natural")
+y3_spline = cs3(x3_hires)
+
+plt.figure()
+plt.scatter(x3, y3, label="dataset (integers)")
+plt.plot(x3_hires, y3_lin, label="linear interp")
+plt.plot(x3_hires, y3_spline, label="cubic spline")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.title("Q3a Plot")
+plt.show()
 
 
 
